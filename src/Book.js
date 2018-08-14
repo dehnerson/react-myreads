@@ -12,7 +12,7 @@ class Book extends React.Component {
     return (
       <div className="book">
         <div className="book-top">
-          <img className='book-cover' src={book.imageLinks.thumbnail} alt={book.title}/>
+          <img className='book-cover' src={book.imageLinks ? book.imageLinks.thumbnail : null} alt={book.title}/>
           <div className="book-shelf-changer">
             <select defaultValue={book.shelf ? book.shelf : 'none'}>
               <option value="move" disabled>Move to...</option>
