@@ -27,9 +27,9 @@ class BooksApp extends React.Component {
               <h1>MyReads</h1>
             </div>
             <div className="list-books-content">
-              <BookShelf title='Currently Reading' books={this.filterBooksByShelf('currentlyReading')}/>
-              <BookShelf title='Want to Read' books={this.filterBooksByShelf('wantToRead')}/>
-              <BookShelf title='Read' books={this.filterBooksByShelf('read')}/>
+              <BookShelf title='Currently Reading' books={this.filterBooksByShelf('currentlyReading')} onMoveBookToShelf={this.moveBookToShelf}/>
+              <BookShelf title='Want to Read' books={this.filterBooksByShelf('wantToRead')} onMoveBookToShelf={this.moveBookToShelf}/>
+              <BookShelf title='Read' books={this.filterBooksByShelf('read')} onMoveBookToShelf={this.moveBookToShelf}/>
             </div>
             <div className="open-search">
               <Link to='/search' >Add a book</Link>
@@ -38,7 +38,7 @@ class BooksApp extends React.Component {
         )}/>
 
         <Route path='/search' render={() => (
-          <BookSearch searchedBooks={this.state.searchedBooks} updateSearchedBooks={this.updateSearchedBooks}/>
+          <BookSearch searchedBooks={this.state.searchedBooks} onMoveBookToShelf={this.moveBookToShelf} updateSearchedBooks={this.updateSearchedBooks}/>
         )}/>
       </div>
     )
@@ -55,6 +55,17 @@ class BooksApp extends React.Component {
       const shelfBook = this.state.books.find((book) => book.id === searchResult.id);
       return shelfBook ? shelfBook : searchResult;
     })});
+  }
+
+  moveBookToShelf = (book, shelf) => {
+    if (this.state.books) {
+      BooksAPI.update(book,shelf).then(() => {
+        book.shelf = shelf;
+        this.setState(state => ({
+          books: state.books.filter(b => b.id !== book.id).concat([ book ])
+        }))
+      });
+    }
   }
 }
 

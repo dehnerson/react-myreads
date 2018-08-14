@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 
 class BookList extends React.Component {
   static propTypes = {
-    books: PropTypes.array.isRequired
+    books: PropTypes.array.isRequired,
+    onMoveBookToShelf : PropTypes.func.isRequired
   }
 
   render() {
@@ -14,7 +15,7 @@ class BookList extends React.Component {
       <ol className="books-grid">
         {books.map((book) => (
           <li>
-            <Book book={book}/>
+            <Book book={book} onMoveBookToShelf={this.props.onMoveBookToShelf}/>
           </li>
         ))}
       </ol>

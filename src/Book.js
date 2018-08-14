@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 class Book extends React.Component {
   static propTypes = {
-    book: PropTypes.object.isRequired
+    book: PropTypes.object.isRequired,
+    onMoveBookToShelf : PropTypes.func.isRequired
   }
 
   render() {
@@ -14,7 +15,7 @@ class Book extends React.Component {
         <div className="book-top">
           <img className='book-cover' src={book.imageLinks ? book.imageLinks.thumbnail : null} alt={book.title}/>
           <div className="book-shelf-changer">
-            <select defaultValue={book.shelf ? book.shelf : 'none'}>
+            <select defaultValue={book.shelf ? book.shelf : 'none'} onChange={(e) => this.props.onMoveBookToShelf(book, e.target.value)}>
               <option value="move" disabled>Move to...</option>
               <option value="currentlyReading">Currently Reading</option>
               <option value="wantToRead">Want to Read</option>

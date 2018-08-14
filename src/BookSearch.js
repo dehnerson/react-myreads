@@ -33,7 +33,7 @@ class BookSearch extends React.Component {
           </div>
         </div>
         <div className="search-books-results">
-          <BookList books={this.props.searchedBooks}/>
+          <BookList books={this.props.searchedBooks} onMoveBookToShelf={this.props.onMoveBookToShelf}/>
         </div>
       </div>
     )
