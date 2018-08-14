@@ -14,11 +14,11 @@ class Book extends React.Component {
         <div className="book-top">
           <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url({book.thumbnail})' }}></div>
           <div className="book-shelf-changer">
-            <select>
+            <select defaultValue={book.shelf ? book.shelf : 'none'}>
               <option value="move" disabled>Move to...</option>
-              <option value="currentlyReading" selected={book.shelf === 'currentlyReading'}>Currently Reading</option>
-              <option value="wantToRead" selected={book.shelf === 'wantToRead'}>Want to Read</option>
-              <option value="read" selected={book.shelf === 'read'}>Read</option>
+              <option value="currentlyReading">Currently Reading</option>
+              <option value="wantToRead">Want to Read</option>
+              <option value="read">Read</option>
               <option value="none">None</option>
             </select>
           </div>
