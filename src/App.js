@@ -38,7 +38,7 @@ class BooksApp extends React.Component {
         )}/>
 
         <Route path='/search' render={() => (
-          <BookSearch searchedBooks={this.state.searchedBooks} onMoveBookToShelf={this.moveBookToShelf} updateSearchedBooks={this.updateSearchedBooks}/>
+          <BookSearch shelfBooks={this.state.books} onMoveBookToShelf={this.moveBookToShelf}/>
         )}/>
       </div>
     )
@@ -46,15 +46,6 @@ class BooksApp extends React.Component {
 
   filterBooksByShelf = (shelf) => {
     return this.state.books.filter((book) => book.shelf === shelf);
-  }
-
-  updateSearchedBooks = (searchResults) => {
-    this.setState({searchedBooks: searchResults.map((searchResult) => {
-      //Replace searched books by books which are in one of the shelves already...
-      // to show the right shelf information also in Search screen!
-      const shelfBook = this.state.books.find((book) => book.id === searchResult.id);
-      return shelfBook ? shelfBook : searchResult;
-    })});
   }
 
   moveBookToShelf = (book, shelf) => {

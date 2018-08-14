@@ -6,12 +6,13 @@ import * as BooksAPI from './BooksAPI';
 
 class BookSearch extends React.Component {
   static propTypes = {
-    searchedBooks: PropTypes.array.isRequired,
-    updateSearchedBooks: PropTypes.func.isRequired
+    shelfBooks: PropTypes.array.isRequired,
+    onMoveBookToShelf: PropTypes.func.isRequired
   }
 
   state = {
-    query: ''
+    query: '',
+    searchedBooks: []
   }
 
   render() {
@@ -33,7 +34,7 @@ class BookSearch extends React.Component {
           </div>
         </div>
         <div className="search-books-results">
-          <BookList books={this.props.searchedBooks} onMoveBookToShelf={this.props.onMoveBookToShelf}/>
+          <BookList books={this.state.searchedBooks} onMoveBookToShelf={this.props.onMoveBookToShelf}/>
         </div>
       </div>
     )
@@ -47,20 +48,29 @@ class BookSearch extends React.Component {
     const query = this.state.query;
 
     if(!query) {
-      this.props.updateSearchedBooks([]);
+      this.updateSearchedBooks([]);
       return;
     }
 
-    BooksAPI.search(query).then((searchResult) => {
+    BooksAPI.search(query).then((searchResults) => {
       if(query !== this.state.query) return;
 
-      if(searchResult.error) {
-        this.props.updateSearchedBooks([]);
+      if(searchResults.error) {
+        this.updateSearchedBooks([]);
         return;
       }
 
-      this.props.updateSearchedBooks(searchResult);
+      this.updateSearchedBooks(searchResults);
     });
+  }
+
+  updateSearchedBooks = (searchResults) => {
+    this.setState({searchedBooks: searchResults.map((searchResult) => {
+      //Replace searched books by books which are in one of the shelves already...
+      // to show the right shelf information also in Search screen!
+      const shelfBook = this.props.shelfBooks.find((book) => book.id === searchResult.id);
+      return shelfBook ? shelfBook : searchResult;
+    })});
   }
 }
 
