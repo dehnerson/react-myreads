@@ -13,7 +13,8 @@ class BooksApp extends React.Component {
      * pages, as well as provide a good URL they can bookmark and share.
      */
     showSearchPage: false,
-    books: []
+    books: [],
+    searchedBooks: []
   }
 
   componentDidMount() {
@@ -26,7 +27,7 @@ class BooksApp extends React.Component {
     return (
       <div className="app">
         {this.state.showSearchPage ? (
-          <BookSearch getBookFromShelf={(bookID) => {this.getBookFromShelf(bookID)}}/>
+          <BookSearch searchedBooks={this.state.searchedBooks} updateSearchedBooks={this.updateSearchedBooks}/>
         ) : (
           <div className="list-books">
             <div className="list-books-title">
@@ -50,8 +51,13 @@ class BooksApp extends React.Component {
     return this.state.books.filter((book) => book.shelf === shelf);
   }
 
-  getBookFromShelf = (bookID) => {
-
+  updateSearchedBooks = (searchResults) => {
+    this.setState({searchedBooks: searchResults.map((searchResult) => {
+      //Replace searched books by books which are in one of the shelves already...
+      // to show the right shelf information also in Search screen!
+      const shelfBook = this.state.books.find((book) => book.id === searchResult.id);
+      return shelfBook ? shelfBook : searchResult;
+    })});
   }
 }
 

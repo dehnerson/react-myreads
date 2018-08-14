@@ -1,10 +1,12 @@
 import React from 'react';
 import BookList from './BookList';
 import PropTypes from 'prop-types';
+import * as BooksAPI from './BooksAPI';
 
 class BookSearch extends React.Component {
   static propTypes = {
-    getBookFromShelf: PropTypes.func.isRequired
+    searchedBooks: PropTypes.array.isRequired,
+    updateSearchedBooks: PropTypes.func.isRequired
   }
 
   state = {
@@ -30,14 +32,34 @@ class BookSearch extends React.Component {
           </div>
         </div>
         <div className="search-books-results">
-          <BookList books={[]}/>
+          <BookList books={this.props.searchedBooks}/>
         </div>
       </div>
     )
   }
 
   updateQuery = (query) => {
-    this.setState({query: query});
+    this.setState({query: query}, this.search);
+  }
+
+  search = () => {
+    const query = this.state.query;
+
+    if(!query) {
+      this.props.updateSearchedBooks([]);
+      return;
+    }
+
+    BooksAPI.search(query).then((searchResult) => {
+      if(query !== this.state.query) return;
+
+      if(searchResult.error) {
+        this.props.updateSearchedBooks([]);
+        return;
+      }
+
+      this.props.updateSearchedBooks(searchResult);
+    });
   }
 }
 
