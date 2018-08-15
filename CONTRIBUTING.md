@@ -1,3 +1,4 @@
 # How to contribute
 
-The files in this repository are used in the course videos and are the starting point for all students. Because we want all students to have the same experience going through course, if your pull request alters any of the core files, then it (most likely) will _not_ be merged into the project.
+This project started as a part of a [Udacity](https://udacity.com/) course, but it will be continued.
+Therefore, feel free to contribute any ideas for improvements. _I will be happy to check out your pull requestes!_
