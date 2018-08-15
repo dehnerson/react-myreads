@@ -12,7 +12,8 @@ class BookSearch extends React.Component {
 
   state = {
     query: '',
-    searchedBooks: []
+    searchedBooks: [],
+    isLoading: false
   }
 
   render() {
@@ -32,6 +33,7 @@ class BookSearch extends React.Component {
             <input type="text" placeholder="Search by title or author" value={this.state.query} onChange={(event) => this.updateQuery(event.target.value)}/>
 
           </div>
+          {this.state.isLoading && (<div className="loader"/>)}
         </div>
         <div className="search-books-results">
           <BookList books={this.state.searchedBooks} onMoveBookToShelf={this.props.onMoveBookToShelf}/>
@@ -52,6 +54,8 @@ class BookSearch extends React.Component {
       return;
     }
 
+    this.setState({isLoading: true});
+
     BooksAPI.search(query).then((searchResults) => {
       if(query !== this.state.query) return;
 
@@ -61,6 +65,10 @@ class BookSearch extends React.Component {
       }
 
       this.updateSearchedBooks(searchResults);
+    }).catch((e) => {
+      if(query !== this.state.query) return;
+
+      this.updateSearchedBooks([]);
     });
   }
 
@@ -70,6 +78,7 @@ class BookSearch extends React.Component {
       // to show the right shelf information also in Search screen!
       const shelfBook = this.props.shelfBooks.find((book) => book.id === searchResult.id);
       return shelfBook ? shelfBook : searchResult;
+    this.setState({isLoading: false, searchedBooks: searchResults.map((searchResult) => {
     })});
   }
 }
