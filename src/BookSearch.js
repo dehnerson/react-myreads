@@ -76,12 +76,15 @@ class BookSearch extends React.Component {
   }
 
   updateSearchedBooks = (searchResults) => {
-    this.setState({searchedBooks: searchResults.map((searchResult) => {
-      //Replace searched books by books which are in one of the shelves already...
-      // to show the right shelf information also in Search screen!
-      const shelfBook = this.props.shelfBooks.find((book) => book.id === searchResult.id);
-      return shelfBook ? shelfBook : searchResult;
     this.setState({isLoading: false, searchedBooks: searchResults.map((searchResult) => {
+      //Enhance search results with shelf property from shelf books
+      try {
+        searchResult.shelf = this.props.shelfBooks.find((book) => book.id === searchResult.id).shelf;
+        return searchResult;
+      }
+      catch(e) {
+        return searchResult;
+      }
     })});
   }
 }
